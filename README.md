@@ -21,5 +21,3 @@ O **CHUTA AÍ!** é uma plataforma web interativa desenvolvida para o gerenciame
 * **PrimeFaces 12** para componentes de interface ricos e responsivos.
 * **CSS3 Customizado** (Dark Mode).
 
-## ⚙️ Como Executar o Projeto Localmente
-
