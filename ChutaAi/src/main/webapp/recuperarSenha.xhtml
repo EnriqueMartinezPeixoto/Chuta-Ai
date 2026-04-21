@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Recuperar Senha - CHUTA AÍ!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        /* Fundo principal escuro padrão do sistema */
+        body { background-color: #0f0f0f; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; color: #ffffff; }
+
+        /* Cartão central escuro premium */
+        .login-card {
+            background: #1c1c1e; border-radius: 12px; padding: 40px;
+            width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            text-align: center; border: 1px solid #2c2c2e;
+        }
+
+        /* Textos e Títulos com a nossa cor vermelha */
+        .logo-title { font-size: 2.2em; font-weight: 900; color: #e53935; margin-bottom: 5px; letter-spacing: -0.5px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .subtitle { color: #aaaaaa; margin-bottom: 30px; font-size: 0.95em; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { font-weight: bold; color: #dddddd; display: block; margin-bottom: 8px; font-size: 0.95em; }
+
+        /* Forçando o PrimeFaces a usar inputs escuros */
+        .ui-inputfield {
+            width: 100% !important; box-sizing: border-box; padding: 12px !important;
+            background-color: #1a1a1a !important; color: #ffffff !important; border: 1px solid #333 !important;
+            border-radius: 8px !important;
+        }
+        .ui-inputfield:focus {
+            border-color: #e53935 !important; box-shadow: 0 0 5px rgba(229, 57, 53, 0.4) !important;
+        }
+
+        /* Botão Principal Vermelho */
+        .btn-recuperar {
+            background-color: #e53935 !important; color: white !important; border: none !important;
+            width: 100%; padding: 10px !important; font-size: 1.1em !important; font-weight: bold !important;
+            border-radius: 8px !important; margin-top: 10px; transition: background 0.2s;
+        }
+        .btn-recuperar:hover { background-color: #c62828 !important; }
+
+        /* Botão Voltar Neutro */
+        .btn-voltar {
+            background-color: transparent !important; color: #aaaaaa !important; border: 1px solid #444 !important;
+            width: 100%; margin-top: 15px !important; font-weight: bold !important; border-radius: 8px !important;
+            transition: all 0.2s; padding: 8px !important;
+        }
+        .btn-voltar:hover { background-color: #2c2c2e !important; color: #ffffff !important; }
+
+    </style>
+</h:head>
+
+<h:body>
+    <div class="login-card">
+        <div class="logo-title">⚽ CHUTA AÍ!</div>
+        <div class="subtitle">Esqueceu a senha? Relaxa!</div>
+
+        <h:form id="formRecuperar">
+            <p:messages id="msgs" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div class="input-group">
+                <h:outputLabel for="email" value="Digite seu E-mail:" />
+                <p:inputText id="email" value="#{recuperarSenhaController.emailInformado}"
+                             required="true" requiredMessage="O e-mail é obrigatório."
+                             placeholder="exemplo@email.com" />
+            </div>
+
+            <p:commandButton value="Enviar Nova Senha"
+                             action="#{recuperarSenhaController.recuperarSenha}"
+                             update="@form"
+                             styleClass="btn-recuperar"
+                             icon="pi pi-envelope"/>
+
+            <p:button value="Voltar para o Login"
+                      outcome="index"
+                      icon="pi pi-arrow-left"
+                      styleClass="ui-button-secondary ui-button-flat btn-voltar"/>
+
+        </h:form>
+    </div>
+</h:body>
+</html>

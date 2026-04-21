@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Entrar - CHUTA AÍ!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #111111;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .login-box {
+            width: 100%;
+            max-width: 380px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Cabeçalho / Logo */
+        .header-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .icone-bola {
+            font-size: 55px;
+            margin-bottom: 5px;
+        }
+        .titulo {
+            color: #d32f2f;
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .subtitulo {
+            color: #888888;
+            font-size: 15px;
+            margin-top: 5px;
+        }
+
+        /* Abas de Navegação */
+        .tabs-container {
+            display: flex;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            padding: 5px;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .tab-active {
+            background-color: #d32f2f;
+            color: #ffffff;
+        }
+        .tab-inactive {
+            background-color: transparent;
+            color: #888888;
+        }
+        .tab-inactive:hover {
+            color: #ffffff;
+        }
+
+        /* Campos de Formulário */
+        .p-field {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .p-field label {
+            font-weight: normal;
+            color: #aaaaaa;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+        }
+        .ui-inputfield {
+            width: 100% !important;
+            box-sizing: border-box;
+            padding: 15px !important;
+            border-radius: 10px !important;
+            border: 1px solid #2a2a2a !important;
+            background-color: #1a1a1a !important;
+            font-size: 1em !important;
+            color: #ffffff !important;
+            box-shadow: none !important;
+        }
+        .ui-inputfield:focus {
+            border-color: #d32f2f !important;
+            background-color: #222222 !important;
+        }
+
+        /* Botão Principal */
+        .btn-login {
+            width: 100%;
+            background-color: #d32f2f !important;
+            border: none !important;
+            font-weight: bold !important;
+            padding: 15px 0 !important;
+            margin-top: 10px;
+            font-size: 16px !important;
+            border-radius: 10px !important;
+            color: white !important;
+            text-shadow: none !important;
+        }
+        .btn-login:hover {
+            background-color: #b71c1c !important;
+        }
+
+        /* Novo Botão Secundário: Esqueci a Senha */
+        .btn-recuperar {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 12px;
+            color: #888888;
+            background-color: transparent;
+            border: 1px solid #333333;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-recuperar:hover {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border-color: #d32f2f;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="login-box">
+
+        <div class="header-logo">
+            <div class="icone-bola">⚽</div>
+            <h1 class="titulo">CHUTA AÍ!</h1>
+            <div class="subtitulo">Bolão Copa 2026</div>
+        </div>
+
+        <div class="tabs-container">
+            <a href="#" class="tab tab-active">Entrar</a>
+            <a href="cadastro.xhtml" class="tab tab-inactive">Criar Conta</a>
+        </div>
+
+        <h:form id="formLogin">
+            <p:messages id="mensagens" showDetail="false" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
+
+            <div class="ui-fluid">
+                <div class="p-field">
+                    <p:outputLabel for="email" value="Email ou Usuário" />
+                    <p:inputText id="email" value="#{loginController.email}"
+                                 required="true" requiredMessage="O e-mail é obrigatório"
+                                 placeholder="seu@email.com"/>
+                </div>
+
+                <div class="p-field">
+                    <p:outputLabel for="senha" value="Senha" />
+                    <p:password id="senha" value="#{loginController.senha}"
+                                required="true" requiredMessage="A senha é obrigatória"
+                                placeholder="••••••••"/>
+                </div>
+            </div>
+
+            <p:commandButton value="Entrar" action="#{loginController.login}"
+                             styleClass="btn-login" update="@form" />
+        </h:form>
+
+        <a href="recuperarSenha.xhtml" class="btn-recuperar">
+            <i class="pi pi-key" style="margin-right: 5px;"></i> Esqueci minha senha
+        </a>
+
+    </div>
+</h:body>
+</html>

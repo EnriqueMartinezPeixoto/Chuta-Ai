@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Registrar Palpite - CHUTA AÍ!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        /* Fundo escuro igual ao print */
+        body { background-color: #0f0f0f; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: #ffffff; }
+
+        /* Navbar escura com logo vermelha (Padronizada) */
+        .navbar { background-color: #1a1a1a; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2a2a; margin-bottom: 30px; }
+        .logo { margin: 0; color: #e53935; font-weight: 900; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+        .nav-controls { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+
+        .user-name { font-weight: normal; color: #aaaaaa !important; padding-right: 15px; border-right: 1px solid #333; }
+        .ui-button-plain { color: #aaaaaa !important; text-transform: uppercase; font-size: 0.85em !important; font-weight: 600 !important; letter-spacing: 0.5px; }
+        .ui-button-plain:hover { color: #ffffff !important; background: transparent !important; }
+        .btn-sair { color: #555 !important; font-weight: bold !important; text-decoration: none; }
+        .btn-sair:hover { color: #e53935 !important; }
+
+        /* Cartão de Palpite Escuro */
+        .card-palpite {
+            background: #1c1c1e; border: 1px solid #2c2c2e; border-radius: 12px; padding: 30px;
+            max-width: 550px; margin: 20px auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .vs-text { font-size: 2em; font-weight: bold; color: #666; margin: 0 25px; align-self: center; }
+        .team-container { flex: 1; }
+        .team-label { font-size: 1.4em; font-weight: bold; color: #ffffff; display: block; margin-bottom: 15px; min-height: 3em; display: flex; align-items: center; justify-content: center; }
+
+        /* Estilização específica para os inputs de gols (Dark Mode) */
+        .input-gols .ui-inputfield {
+            background-color: #2c2c2e !important;
+            color: #ffffff !important;
+            text-align: center !important;
+            font-size: 2.5em !important;
+            font-weight: bold !important;
+            width: 100px !important;
+            height: 80px !important;
+            border-radius: 12px !important;
+            border: 1px solid #444 !important;
+        }
+        .input-gols .ui-inputfield:focus { border-color: #e53935 !important; box-shadow: 0 0 8px rgba(229, 57, 53, 0.4) !important; }
+
+        /* Botões Vermelhos e Cinzas */
+        .btn-confirmar { background-color: #e53935 !important; color: white !important; border: none !important; height: 60px !important; font-size: 1.2em !important; font-weight: 800 !important; margin-top: 20px !important; border-radius: 30px !important; transition: background 0.2s; }
+        .btn-confirmar:hover { background-color: #c62828 !important; }
+
+        .btn-voltar { margin-top: 15px !important; color: #888 !important; font-weight: bold !important; }
+        .btn-voltar:hover { color: #fff !important; background: transparent !important; }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="navbar">
+        <h2 class="logo">⚽ CHUTA AÍ!</h2>
+
+        <h:form id="navForm">
+            <div class="nav-controls">
+                <p:commandLink value="#{loginController.usuarioLogado.nome}"
+                               action="perfil?faces-redirect=true"
+                               styleClass="user-name"
+                               style="text-decoration: none;"
+                               ajax="false"
+                               title="Editar Meu Perfil" />
+
+                <h:panelGroup rendered="#{loginController.usuarioLogado.admin}">
+                    <p:commandButton value="Gestor" icon="pi pi-cog" action="admin_dashboard?faces-redirect=true" styleClass="ui-button-warning ui-button-flat" style="font-weight: bold;" ajax="false"/>
+                </h:panelGroup>
+
+                <p:commandButton value="Meus Palpites" action="palpite?faces-redirect=true" styleClass="ui-button-flat ui-button-plain" ajax="false"/>
+                <p:commandButton value="Meus Bolões" action="bolao?faces-redirect=true" styleClass="ui-button-flat ui-button-plain" ajax="false"/>
+                <p:commandButton value="Ranking" action="ranking?faces-redirect=true" styleClass="ui-button-flat ui-button-plain" ajax="false"/>
+
+                <p:commandLink value="Sair" action="#{loginController.logout}" styleClass="btn-sair" ajax="false"/>
+            </div>
+        </h:form>
+    </div>
+
+    <div class="card-palpite">
+        <h2 style="color: #ffffff; margin-top: 0;">Finalize seu Chute</h2>
+        <p style="color: #e53935; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+            #{palpiteController.palpiteAtual.partida.fase}
+        </p>
+
+        <h:form id="formChute">
+            <p:messages id="msgs" closable="true" showDetail="false">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div style="display: flex; align-items: flex-start; justify-content: center; margin: 40px 0;">
+                <div class="team-container">
+                    <span class="team-label">#{palpiteController.palpiteAtual.partida.timeCasa}</span>
+                    <p:inputNumber value="#{palpiteController.palpiteAtual.palpiteCasa}"
+                                   decimalPlaces="0" minValue="0" maxValue="99"
+                                   placeholder="0" styleClass="input-gols" />
+                </div>
+
+                <div class="vs-text">X</div>
+
+                <div class="team-container">
+                    <span class="team-label">#{palpiteController.palpiteAtual.partida.timeFora}</span>
+                    <p:inputNumber value="#{palpiteController.palpiteAtual.palpiteFora}"
+                                   decimalPlaces="0" minValue="0" maxValue="99"
+                                   placeholder="0" styleClass="input-gols" />
+                </div>
+            </div>
+
+            <p:commandButton value="CONFIRMAR PALPITE"
+                             action="#{palpiteController.salvarPalpite}"
+                             icon="pi pi-check-circle"
+                             ajax="false"
+                             styleClass="btn-confirmar"
+                             style="width: 100%;" />
+
+            <p:button value="Desistir e Voltar" outcome="partidas"
+                      icon="pi pi-arrow-left"
+                      styleClass="ui-button-flat btn-voltar"
+                      style="width: 100%;" />
+        </h:form>
+    </div>
+</h:body>
+</html>

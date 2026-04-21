@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Ranking - CHUTA AÍ!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+        }
+        /* Estilo do Menu Superior */
+        .navbar {
+            background-color: #2e7d32;
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+        .navbar-menu a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+        .navbar-menu a:hover {
+            text-decoration: underline;
+        }
+        /* Container Principal */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .titulo-pagina {
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        /* Destacando o Top 3 com CSS do PrimeFaces */
+        .podium-1 { font-weight: bold; color: #d4af37; font-size: 1.1em;} /* Ouro */
+        .podium-2 { font-weight: bold; color: #aaa9ad; } /* Prata */
+        .podium-3 { font-weight: bold; color: #cd7f32; } /* Bronze */
+    </style>
+</h:head>
+
+<h:body>
+
+    <div class="navbar">
+        <h:link outcome="partidas" value="⚽ CHUTA AÍ!" styleClass="navbar-brand"/>
+        <div class="navbar-menu">
+            <h:link outcome="partidas" value="Jogos" />
+            <h:link outcome="ranking" value="Ranking" />
+            <h:form style="display:inline; margin-left: 20px;">
+                <p:commandLink action="#{loginController.logout}" value="Sair" style="color: #ffc107; font-weight: bold; text-decoration: none;"/>
+            </h:form>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="titulo-pagina">🏆 Tabela de Classificação</h2>
+
+        <h:form id="formRanking">
+            <p:dataTable value="#{rankingController.listaRanking}" var="usuario"
+                         rowIndexVar="index" emptyMessage="Nenhum jogador pontuou ainda."
+                         stripedRows="true" showGridlines="false">
+
+                <p:column headerText="Pos" style="width: 60px; text-align: center;">
+                    <h:outputText value="#{index + 1}º"
+                                  styleClass="#{index == 0 ? 'podium-1' : (index == 1 ? 'podium-2' : (index == 2 ? 'podium-3' : ''))}" />
+                </p:column>
+
+                <p:column headerText="Jogador">
+                    <h:outputText value="#{usuario.nome}" style="#{index == 0 ? 'font-weight: bold;' : ''}" />
+
+                    <h:outputText value=" 👑" rendered="#{index == 0}" />
+                </p:column>
+
+                <p:column headerText="Pontos" style="width: 100px; text-align: center; font-weight: bold; color: #2e7d32;">
+                    <h:outputText value="#{usuario.pontosTotal} pts" />
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+    </div>
+
+</h:body>
+</html>

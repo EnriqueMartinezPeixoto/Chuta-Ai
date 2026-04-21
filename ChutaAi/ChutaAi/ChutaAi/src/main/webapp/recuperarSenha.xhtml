@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Recuperar Senha - CHUTA AÍ!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .login-card {
+            background: white; border-radius: 12px; padding: 40px;
+            width: 100%; max-width: 400px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .logo-title { font-size: 2em; font-weight: 900; color: #2e7d32; margin-bottom: 5px; }
+        .subtitle { color: #666; margin-bottom: 30px; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { font-weight: bold; color: #444; display: block; margin-bottom: 5px; }
+        .ui-inputfield { width: 100% !important; box-sizing: border-box; padding: 10px !important; }
+        .btn-recuperar { background-color: #2e7d32 !important; border: none !important; width: 100%; padding: 10px !important; font-size: 1.1em !important; font-weight: bold !important; border-radius: 8px !important; margin-top: 10px; }
+        .links-footer { margin-top: 20px; font-size: 0.9em; }
+        .links-footer a { color: #2e7d32; text-decoration: none; font-weight: bold; }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="login-card">
+        <div class="logo-title">⚽ CHUTA AÍ!</div>
+        <div class="subtitle">Esqueceu a senha? Relaxa!</div>
+
+        <h:form id="formRecuperar">
+            <p:messages id="msgs" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div class="input-group">
+                <h:outputLabel for="email" value="Digite seu E-mail:" />
+                <p:inputText id="email" value="#{recuperarSenhaController.emailInformado}"
+                             required="true" requiredMessage="O e-mail é obrigatório."
+                             placeholder="exemplo@email.com" />
+            </div>
+
+            <p:commandButton value="Enviar Nova Senha"
+                             action="#{recuperarSenhaController.recuperarSenha}"
+                             update="@form"
+                             styleClass="btn-recuperar"
+                             icon="pi pi-envelope"/>
+
+            <div class="links-footer">
+                Lembrou da senha? <h:link outcome="login" value="Voltar para o Login" />
+            </div>
+        </h:form>
+    </div>
+</h:body>
+</html>

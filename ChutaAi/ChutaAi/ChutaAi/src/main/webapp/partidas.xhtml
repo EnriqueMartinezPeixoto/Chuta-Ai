@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Jogos - CHUTA AÍ!</title>
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        .navbar { background-color: #2e7d32; padding: 10px 25px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .nav-controls { display: flex; align-items: center; gap: 20px; }
+        .user-name { font-weight: bold; border-right: 1px solid rgba(255,255,255,0.3); padding-right: 15px; }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        .match-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; }
+        .team { font-weight: 800; font-size: 1.25em; width: 30%; color: #333; }
+        .team-left { text-align: right; }
+        .team-right { text-align: left; }
+        .info { width: 20%; text-align: center; }
+        .action-area { width: 20%; text-align: right; }
+        .btn-sair { color: #ffc107 !important; font-weight: bold !important; text-decoration: none; }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="navbar">
+        <h2 style="margin:0">⚽ CHUTA AÍ!</h2>
+        <h:form id="navForm">
+            <div class="nav-controls">
+                <span class="user-name">Olá, #{loginController.usuarioLogado.nome}</span>
+                <p:commandButton value="Meus Palpites" icon="pi pi-list" action="palpite?faces-redirect=true" styleClass="ui-button-flat ui-button-plain" style="color: white; font-weight: bold;" ajax="false"/>
+                <p:commandLink value="Sair" action="#{loginController.logout}" styleClass="btn-sair" ajax="false"/>
+            </div>
+        </h:form>
+    </div>
+    <h:commandButton value="Nova Partida" action="#{partidaController.nova()}"
+                     rendered="#{loginController.usuarioLogado.perfil eq 'ADMIN'}" />
+
+    <h:commandButton value="Excluir" action="#{partidaController.excluir(partida)}"
+                     rendered="#{loginController.usuarioLogado.perfil eq 'ADMIN'}" />
+    <div class="container">
+        <h:form id="form">
+            <p:messages id="msgs" closable="true"><p:autoUpdate /></p:messages>
+
+            <ui:repeat value="#{partidaController.listaPartidas}" var="p">
+                <h:panelGroup rendered="#{p.placarCasaReal == null}">
+                    <div class="match-card">
+                        <div class="team team-left">#{p.timeCasa}</div>
+                        <div class="info">
+                            <p:badge value="#{p.fase}" severity="success" /><br/>
+                            <h:outputText value="#{p.dataHora}" style="font-weight: 600;">
+                                <f:convertDateTime pattern="dd/MM HH:mm" timeZone="America/Belem"/>
+                            </h:outputText>
+                        </div>
+                        <div class="team team-right">#{p.timeFora}</div>
+                        <div class="action-area">
+                            <div class="action-area">
+                                <h:commandButton value="Palpitar ✏️"
+                                                 action="#{palpiteController.irParaPalpite(p)}"
+                                                 style="background-color: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </ui:repeat>
+        </h:form>
+    </div>
+</h:body>
+</html>

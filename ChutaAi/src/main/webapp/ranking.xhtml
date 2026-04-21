@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Ranking Global - CHUTA AÍ!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        /* Fundo escuro padrão */
+        body { background-color: #0f0f0f; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: #ffffff; }
+
+        /* Navbar escura com logo vermelha */
+        .navbar { background-color: #1a1a1a; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2a2a; margin-bottom: 30px; }
+        .logo { margin: 0; color: #e53935; font-weight: 900; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+        .nav-controls { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+
+        .user-name { font-weight: normal; color: #aaaaaa !important; padding-right: 15px; border-right: 1px solid #333; }
+        .ui-button-plain { color: #aaaaaa !important; text-transform: uppercase; font-size: 0.85em !important; font-weight: 600 !important; letter-spacing: 0.5px; }
+        .ui-button-plain:hover { color: #ffffff !important; background: transparent !important; }
+        .btn-sair { color: #555 !important; font-weight: bold !important; text-decoration: none; }
+        .btn-sair:hover { color: #e53935 !important; }
+
+        .container { max-width: 800px; margin: 0 auto 40px auto; padding: 0 20px; }
+
+        /* Cabeçalho do Ranking */
+        .ranking-header { background: #1c1c1e; padding: 25px 20px; border-radius: 12px 12px 0 0; text-align: center; border: 1px solid #2c2c2e; border-bottom: none; }
+        .ranking-header h2 { margin: 0; font-size: 2.2em; color: #ffffff; letter-spacing: 1px; }
+        .ranking-header p { margin: 5px 0 0 0; color: #888; font-size: 0.9em; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Tabela de Ranking Dark */
+        .ranking-card { border-radius: 0 0 12px 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); overflow: hidden; border: 1px solid #2c2c2e; border-top: none; }
+        .ui-datatable { background: #1c1c1e; }
+        .ui-datatable .ui-datatable-header { background: #1c1c1e !important; border: none !important; border-bottom: 1px solid #2c2c2e !important; padding: 15px 20px !important; font-size: 1.2em; font-weight: 800; color: #ffffff !important; text-align: left; }
+        .ui-datatable th { background-color: #1a1a1a !important; border: none !important; border-bottom: 1px solid #2c2c2e !important; color: #888888 !important; font-weight: 700 !important; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; padding: 15px !important; }
+        .ui-datatable td { background-color: #1c1c1e !important; border: none !important; border-bottom: 1px solid #2c2c2e !important; padding: 18px 15px !important; color: #ffffff !important; }
+        .ui-datatable tr:hover td { background-color: #242426 !important; }
+        .ui-datatable-empty-message td { color: #888888 !important; text-align: center !important; padding: 40px !important; }
+
+        /* Cores do Pódio adaptadas para Dark Mode */
+        .podio-1 { background-color: rgba(255, 215, 0, 0.08) !important; color: #ffd700 !important; } /* Dourado Escuro */
+        .podio-2 { background-color: rgba(192, 192, 192, 0.05) !important; color: #e0e0e0 !important; } /* Prata Escuro */
+        .podio-3 { background-color: rgba(205, 127, 50, 0.08) !important; color: #cd7f32 !important; } /* Bronze Escuro */
+
+        .posicao-texto { font-size: 1.8em; font-weight: 900; }
+        .pontos-texto { font-size: 1.5em; font-weight: 900; color: #e53935; }
+    </style>
+</h:head>
+
+<h:body>
+
+    <div class="navbar">
+        <h2 class="logo">⚽ CHUTA AÍ!</h2>
+        <h:form id="navForm">
+            <div class="nav-controls">
+                <p:commandLink value="#{loginController.usuarioLogado.nome}" action="perfil?faces-redirect=true" styleClass="user-name" style="text-decoration: none;" ajax="false" />
+
+                <h:panelGroup rendered="#{loginController.usuarioLogado.admin}">
+                    <p:commandButton value="Gestor" icon="pi pi-cog" action="admin_dashboard?faces-redirect=true" styleClass="ui-button-warning ui-button-flat" style="font-weight: bold;" ajax="false"/>
+                </h:panelGroup>
+
+                <p:commandButton value="Voltar aos Jogos" icon="pi pi-arrow-left" action="partidas?faces-redirect=true" styleClass="ui-button-flat ui-button-plain" ajax="false"/>
+                <p:commandLink value="Sair" action="#{loginController.logout}" styleClass="btn-sair" ajax="false"/>
+            </div>
+        </h:form>
+    </div>
+
+    <div class="container">
+
+        <div class="ranking-header">
+            <h2>🏆 Tabela de Classificação</h2>
+            <p>Ranking Global</p>
+        </div>
+
+        <div class="ranking-card">
+            <h:form id="formRanking">
+                <p:dataTable value="#{rankingController.listaRanking}" var="usuario"
+                             rowIndexVar="index" emptyMessage="Nenhum jogador pontuou ainda."
+                             stripedRows="false" showGridlines="false">
+
+                    <p:column headerText="Pos" style="width: 80px; text-align: center;"
+                              styleClass="#{index == 0 ? 'podio-1' : (index == 1 ? 'podio-2' : (index == 2 ? 'podio-3' : ''))}">
+                        <h:outputText value="#{index + 1}º" class="posicao-texto" style="#{index > 2 ? 'color: #555;' : ''}"/>
+                    </p:column>
+
+                    <p:column headerText="Jogador" style="text-align: left; font-size: 1.2em; font-weight: bold;">
+                        <i class="pi pi-user" style="margin-right: 8px; color: #666;"></i>
+                        <h:outputText value="#{usuario.nome}" style="#{index == 0 ? 'color: #ffd700;' : ''}" />
+                        <h:outputText value=" 👑" rendered="#{index == 0}" title="Líder do Ranking" />
+                    </p:column>
+
+                    <p:column headerText="Pontos" style="width: 120px; text-align: center;">
+                        <h:outputText value="#{usuario.pontosTotal}" class="pontos-texto" />
+                        <span style="font-size: 0.8em; color: #888; display: block; text-transform: uppercase;">pts</span>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </div>
+    </div>
+
+</h:body>
+</html>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Registrar Palpite - CHUTA AÍ!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        .navbar-custom { background-color: #2e7d32; padding: 15px; color: white; margin-bottom: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card-palpite {
+            background: white; border-radius: 15px; padding: 30px;
+            max-width: 550px; margin: 20px auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .vs-text { font-size: 2em; font-weight: bold; color: #bbb; margin: 0 25px; align-self: center; }
+        .team-container { flex: 1; }
+        .team-label { font-size: 1.4em; font-weight: bold; color: #333; display: block; margin-bottom: 15px; min-height: 3em; display: flex; align-items: center; justify-content: center; }
+
+        /* Estilização específica para os inputs de gols */
+        .input-gols .ui-inputfield {
+            text-align: center !important;
+            font-size: 2.5em !important;
+            font-weight: bold !important;
+            width: 100px !important;
+            height: 80px !important;
+            border-radius: 10px !important;
+            border: 2px solid #ddd !important;
+        }
+        .input-gols .ui-inputfield:focus { border-color: #2e7d32 !important; box-shadow: 0 0 8px rgba(46,125,50,0.2) !important; }
+
+        .btn-confirmar { background-color: #2e7d32 !important; border: none !important; height: 60px !important; font-size: 1.3em !important; font-weight: bold !important; margin-top: 20px !important; border-radius: 10px !important; }
+        .btn-voltar { margin-top: 15px !important; color: #666 !important; font-weight: bold !important; }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="navbar-custom">
+        <div style="font-size: 1.8em; font-weight: bold; text-align: center;">⚽ CHUTA AÍ!</div>
+    </div>
+
+    <div class="card-palpite">
+        <h2 style="color: #2e7d32; margin-top: 0;">Finalize seu Chute</h2>
+        <p style="color: #888; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+            #{palpiteController.palpiteAtual.partida.fase}
+        </p>
+
+        <h:form id="formChute">
+            <p:messages id="msgs" closable="true" showDetail="false">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div style="display: flex; align-items: flex-start; justify-content: center; margin: 40px 0;">
+                <div class="team-container">
+                    <span class="team-label">#{palpiteController.palpiteAtual.partida.timeCasa}</span>
+                    <p:inputNumber value="#{palpiteController.palpiteAtual.palpiteCasa}"
+                                   decimalPlaces="0" minValue="0" maxValue="99"
+                                   placeholder="0" styleClass="input-gols" />
+                </div>
+
+                <div class="vs-text">X</div>
+
+                <div class="team-container">
+                    <span class="team-label">#{palpiteController.palpiteAtual.partida.timeFora}</span>
+                    <p:inputNumber value="#{palpiteController.palpiteAtual.palpiteFora}"
+                                   decimalPlaces="0" minValue="0" maxValue="99"
+                                   placeholder="0" styleClass="input-gols" />
+                </div>
+            </div>
+
+            <p:commandButton value="CONFIRMAR PALPITE"
+                             action="#{palpiteController.salvarPalpite}"
+                             icon="pi pi-check-circle"
+                             ajax="false"
+                             styleClass="btn-confirmar"
+                             style="width: 100%;" />
+
+            <p:button value="Desistir e Voltar" outcome="partidas"
+                      icon="pi pi-arrow-left"
+                      styleClass="ui-button-flat btn-voltar"
+                      style="width: 100%;" />
+        </h:form>
+    </div>
+</h:body>
+</html>

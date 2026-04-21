@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Painel Gestor - CHUTA AÍ!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        /* Fundo escuro padrão */
+        body { background-color: #0f0f0f; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: #ffffff; }
+
+        /* Navbar Gestor (Destaque para não confundir com tela normal) */
+        .navbar-admin { background-color: #1a1a1a; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e53935; margin-bottom: 30px; }
+        .logo-admin { margin: 0; color: #ffffff; font-weight: 900; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+        .logo-admin i { color: #e53935; }
+
+        .btn-voltar { color: #aaaaaa !important; font-weight: 600 !important; text-transform: uppercase; font-size: 0.85em !important; letter-spacing: 0.5px; }
+        .btn-voltar:hover { color: #ffffff !important; background: transparent !important; }
+
+        .container-admin { max-width: 1100px; margin: 0 auto 40px auto; padding: 0 20px; }
+
+        /* Estilo do TabView PrimeFaces no Dark Mode */
+        .ui-tabs { border: none !important; padding: 0 !important; }
+        .ui-tabs-nav { background: #1c1c1e !important; border-bottom: 1px solid #333 !important; padding: 0 !important; border-radius: 12px 12px 0 0; }
+        .ui-tabs-nav li { background: #1c1c1e !important; border: none !important; margin: 0 !important; top: 1px !important; }
+        .ui-tabs-nav li a { color: #aaaaaa !important; padding: 15px 25px !important; font-weight: bold; font-size: 1.1em; }
+        .ui-tabs-nav li.ui-tabs-selected { border-bottom: 3px solid #e53935 !important; }
+        .ui-tabs-nav li.ui-tabs-selected a { color: #e53935 !important; }
+        .ui-tabs-panels { background: #1c1c1e !important; border: 1px solid #333; border-top: none; border-radius: 0 0 12px 12px; padding: 25px !important; }
+
+        /* Formulários e Grids Internos */
+        .form-grid { background: #1a1a1a; padding: 25px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #2c2c2e; }
+        .form-grid h3 { color: #ffffff; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
+
+        /* Ajuste do PanelGrid para limpar fundo branco */
+        .ui-panelgrid .ui-panelgrid-cell { background: transparent !important; border: none !important; padding: 10px 5px !important; }
+        .ui-outputlabel { color: #dddddd !important; font-weight: bold; font-size: 0.95em; }
+
+        /* Inputs */
+        .ui-inputfield { background-color: #2c2c2e !important; color: #ffffff !important; border: 1px solid #444 !important; padding: 10px !important; border-radius: 8px !important; width: 100%; box-sizing: border-box; }
+        .ui-inputfield:focus { border-color: #e53935 !important; box-shadow: 0 0 5px rgba(229, 57, 53, 0.4) !important; }
+
+        /* Botão Salvar */
+        .btn-salvar { background-color: #e53935 !important; color: white !important; border: none !important; border-radius: 8px !important; font-weight: bold !important; padding: 10px 0 !important; transition: background 0.2s; }
+        .btn-salvar:hover { background-color: #c62828 !important; }
+
+        /* Estilo da Tabela Gestora Dark */
+        .ui-datatable { border-radius: 8px; overflow: hidden; border: 1px solid #333; }
+        .ui-datatable th { background-color: #1a1a1a !important; border: none !important; border-bottom: 1px solid #333 !important; color: #888888 !important; font-weight: 700 !important; text-transform: uppercase; font-size: 0.85em; padding: 15px !important; }
+        .ui-datatable td { background-color: #1c1c1e !important; border: none !important; border-bottom: 1px solid #333 !important; padding: 15px !important; color: #ffffff !important; }
+        .ui-datatable tr:hover td { background-color: #242426 !important; }
+
+        /* Botões de Ação na Tabela */
+        .btn-edit { color: #aaaaaa !important; }
+        .btn-edit:hover { color: #2196F3 !important; background: rgba(33, 150, 243, 0.1) !important; }
+        .btn-delete { color: #aaaaaa !important; }
+        .btn-delete:hover { color: #e53935 !important; background: rgba(229, 57, 53, 0.1) !important; }
+
+        /* OBRIGANDO OS POP-UPS (DIALOGS) A FICAREM ESCUROS */
+        .ui-dialog { background-color: #1c1c1e !important; border: 1px solid #444 !important; box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important; border-radius: 12px !important; }
+        .ui-dialog-titlebar { background-color: #1a1a1a !important; color: #ffffff !important; border-bottom: 1px solid #333 !important; padding: 15px !important; border-radius: 12px 12px 0 0 !important; }
+        .ui-dialog-content { background-color: #1c1c1e !important; color: #dddddd !important; padding: 20px !important; }
+        .ui-dialog .ui-dialog-titlebar-icon { color: #aaaaaa !important; }
+        .ui-dialog .ui-dialog-titlebar-icon:hover { color: #ffffff !important; }
+        .ui-confirm-dialog-message { color: #dddddd !important; font-size: 1.1em; }
+
+        /* CORREÇÃO DA BARRA DE BOTÕES INFERIOR DO POP-UP */
+        .ui-dialog .ui-dialog-buttonpane { background-color: #1c1c1e !important; border-top: 1px solid #333 !important; margin: 0 !important; padding: 15px !important; border-radius: 0 0 12px 12px !important; }
+
+        /* BOTÃO CANCELAR DO POP-UP */
+        .ui-confirmdialog-no { background-color: transparent !important; color: #aaaaaa !important; border: 1px solid #555 !important; border-radius: 8px !important; padding: 5px 15px !important; font-weight: bold !important; }
+        .ui-confirmdialog-no:hover { background-color: #2c2c2e !important; color: #ffffff !important; border-color: #ffffff !important; }
+
+        /* BOTÃO CONFIRMAR (VERMELHO) DO POP-UP */
+        .ui-confirmdialog-yes { background-color: #e53935 !important; color: #ffffff !important; border: none !important; border-radius: 8px !important; padding: 6px 15px !important; font-weight: bold !important; text-shadow: none !important; }
+        .ui-confirmdialog-yes:hover { background-color: #c62828 !important; }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="navbar-admin">
+        <h2 class="logo-admin"><i class="pi pi-cog"></i> Painel do Gestor</h2>
+        <h:form>
+            <p:commandButton value="Voltar aos Jogos" action="partidas?faces-redirect=true" icon="pi pi-arrow-left" styleClass="ui-button-flat btn-voltar" ajax="false"/>
+        </h:form>
+    </div>
+
+    <div class="container-admin">
+        <p:messages id="msgs" closable="true"><p:autoUpdate /></p:messages>
+
+        <p:tabView id="tabViewGestor">
+
+            <p:tab title="Gerenciar Partidas">
+
+                <h:form id="formCadPartida">
+                    <h:inputHidden value="#{adminController.partidaForm.id}" />
+
+                    <div class="form-grid ui-fluid">
+
+                        <h3>1. Dados do Jogo</h3>
+                        <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3">
+                            <p:outputLabel for="casa" value="Time A:" />
+                            <p:inputText id="casa" value="#{adminController.partidaForm.timeCasa}" required="true" />
+
+                            <p:outputLabel for="fora" value="Time B:" />
+                            <p:inputText id="fora" value="#{adminController.partidaForm.timeFora}" required="true" />
+
+                            <p:outputLabel for="data" value="Data/Hora:" />
+                            <p:calendar id="data" value="#{adminController.partidaForm.dataHora}" pattern="dd/MM/yyyy HH:mm" timeZone="America/Belem" required="true" />
+
+                            <p:outputLabel for="fase" value="Fase:" />
+                            <p:inputText id="fase" value="#{adminController.partidaForm.fase}" placeholder="Ex: Grupo A" />
+                        </p:panelGrid>
+
+                        <h3 style="color: #e53935; margin-top: 25px; border-top: 1px solid #333; padding-top: 20px;">
+                            <i class="pi pi-check-circle" style="margin-right: 8px;"></i> 2. Lançar Resultado (Fim de Jogo)
+                        </h3>
+                        <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3">
+                            <p:outputLabel for="golsCasa" value="Gols Time A:" style="color: #e53935;" />
+                            <p:inputNumber id="golsCasa" value="#{adminController.partidaForm.placarCasaReal}" decimalPlaces="0" minValue="0" placeholder="-" />
+
+                            <p:outputLabel for="golsFora" value="Gols Time B:" style="color: #e53935;" />
+                            <p:inputNumber id="golsFora" value="#{adminController.partidaForm.placarForaReal}" decimalPlaces="0" minValue="0" placeholder="-" />
+                        </p:panelGrid>
+
+                        <p:commandButton value="Salvar Partida / Resultado" action="#{adminController.salvarPartida}"
+                                         update="@form :tabViewGestor:formListaPartidas"
+                                         icon="pi pi-save" styleClass="btn-salvar" style="margin-top: 20px; width: 250px;"/>
+                    </div>
+                </h:form>
+
+                <h:form id="formListaPartidas">
+                    <p:dataTable id="listaPartidas" value="#{adminController.todasPartidas}" var="p" stripedRows="false">
+                        <p:column headerText="Jogo" style="font-weight: bold;">
+                            <h:outputText value="#{p.timeCasa} x #{p.timeFora}" />
+                        </p:column>
+                        <p:column headerText="Data">
+                            <h:outputText value="#{p.dataHora}"><f:convertDateTime pattern="dd/MM HH:mm" timeZone="America/Belem" /></h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Placar Real" style="text-align: center;">
+                            <h:outputText value="#{p.placarCasaReal} - #{p.placarForaReal}" rendered="#{p.placarCasaReal != null}" style="font-weight: 900; color: #e53935; font-size: 1.2em;" />
+                            <h:outputText value="Aguardando..." rendered="#{p.placarCasaReal == null}" style="color: #666; font-weight: bold;" />
+                        </p:column>
+
+                        <p:column headerText="Ações" style="text-align: center; width: 150px;">
+                            <p:commandButton icon="pi pi-pencil" action="#{adminController.prepararEdicao(p)}"
+                                             update=":tabViewGestor:formCadPartida" styleClass="ui-button-flat btn-edit" title="Editar / Lançar Gols" />
+
+                            <p:commandButton icon="pi pi-trash" action="#{adminController.excluirPartida(p)}"
+                                             update="@form" styleClass="ui-button-flat btn-delete" title="Excluir">
+                                <p:confirm header="Confirmação" message="Deseja excluir esta partida?" icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:tab>
+
+            <p:tab title="Gerenciar Apostadores">
+
+                <h:form id="formListaUsuarios">
+                    <p:dataTable id="listaUsuarios" value="#{adminController.todosUsuarios}" var="u" stripedRows="false">
+                        <p:column headerText="Nome">#{u.nome}</p:column>
+                        <p:column headerText="E-mail">#{u.email}</p:column>
+                        <p:column headerText="Pontos Total" style="color: #e53935; font-weight: bold; font-size: 1.1em;">#{u.pontosTotal}</p:column>
+                        <p:column headerText="Ações" style="text-align: center; width: 100px;">
+                            <p:commandButton icon="pi pi-user-minus" action="#{adminController.excluirUsuario(u)}"
+                                             update="@form" styleClass="ui-button-flat btn-delete" title="Remover Usuário">
+                                <p:confirm header="Banir Usuário" message="Tem certeza que deseja remover este usuário do sistema?" icon="pi pi-user-times" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:tab>
+        </p:tabView>
+    </div>
+
+    <h:form>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="400">
+            <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no ui-button-flat" style="color: #aaa;"/>
+            <p:commandButton value="Sim, Excluir" type="button" styleClass="ui-confirmdialog-yes ui-button-danger" style="border-radius: 8px;" />
+        </p:confirmDialog>
+    </h:form>
+
+</h:body>
+</html>

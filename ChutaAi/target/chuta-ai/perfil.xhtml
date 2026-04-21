@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Meu Perfil - CHUTA AÍ!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        /* Fundo escuro padrão */
+        body { background-color: #0f0f0f; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: #ffffff; }
+
+        /* Navbar escura com logo vermelha */
+        .navbar { background-color: #1a1a1a; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2a2a; margin-bottom: 30px; }
+        .logo { margin: 0; color: #e53935; font-weight: 900; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+        .nav-controls { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+
+        .user-name { font-weight: normal; color: #aaaaaa !important; padding-right: 15px; border-right: 1px solid #333; }
+        .ui-button-plain { color: #aaaaaa !important; text-transform: uppercase; font-size: 0.85em !important; font-weight: 600 !important; letter-spacing: 0.5px; }
+        .ui-button-plain:hover { color: #ffffff !important; background: transparent !important; }
+        .btn-sair { color: #555 !important; font-weight: bold !important; text-decoration: none; }
+        .btn-sair:hover { color: #e53935 !important; }
+
+        .container { max-width: 800px; margin: 0 auto 40px auto; padding: 0 20px; }
+
+        /* Cartões de Perfil Escuros */
+        .card-perfil { background: #1c1c1e; border: 1px solid #2c2c2e; border-radius: 12px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); margin-bottom: 30px; }
+        .card-title { color: #ffffff; border-bottom: 1px solid #2c2c2e; padding-bottom: 15px; margin-top: 0; display: flex; align-items: center; font-size: 1.4em; }
+
+        /* Substituindo o PanelGrid por Divs limpas */
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+
+        /* Customização dos Inputs PrimeFaces para Dark Mode */
+        .ui-inputfield { background-color: #1a1a1a !important; color: #ffffff !important; border: 1px solid #333 !important; padding: 12px !important; border-radius: 8px !important; box-sizing: border-box; width: 100%; }
+        .ui-inputfield:focus { border-color: #e53935 !important; box-shadow: 0 0 5px rgba(229, 57, 53, 0.4) !important; }
+        .ui-outputlabel { color: #dddddd !important; font-size: 0.95em; font-weight: bold; }
+
+        /* Ajuste do campo readonly (e-mail bloqueado) */
+        .input-readonly { background-color: #111111 !important; color: #666666 !important; border-color: #222 !important; }
+
+        /* Botões de Ação Vermelhos */
+        .btn-acao { background-color: #e53935 !important; color: white !important; border: none !important; border-radius: 8px !important; font-weight: bold !important; padding: 10px 0 !important; transition: background 0.2s; }
+        .btn-acao:hover { background-color: #c62828 !important; }
+
+        /* Ajuste do Pop-up de força da senha */
+        .ui-password-panel { background-color: #1c1c1e !important; border: 1px solid #444 !important; color: #ddd !important; box-shadow: 0 5px 15px rgba(0,0,0,0.8) !important; }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="navbar">
+        <h2 class="logo">⚽ CHUTA AÍ!</h2>
+        <h:form id="navForm">
+            <div class="nav-controls">
+                <span class="user-name">Olá, #{loginController.usuarioLogado.nome}</span>
+
+                <h:panelGroup rendered="#{loginController.usuarioLogado.admin}">
+                    <p:commandButton value="Gestor" icon="pi pi-cog" action="admin_dashboard?faces-redirect=true" styleClass="ui-button-warning ui-button-flat" style="font-weight: bold;" ajax="false"/>
+                </h:panelGroup>
+
+                <p:commandButton value="Voltar aos Jogos" icon="pi pi-arrow-left" action="partidas?faces-redirect=true" styleClass="ui-button-flat ui-button-plain" ajax="false"/>
+                <p:commandLink value="Sair" action="#{loginController.logout}" styleClass="btn-sair" ajax="false"/>
+            </div>
+        </h:form>
+    </div>
+
+    <div class="container">
+
+        <div class="card-perfil">
+            <h3 class="card-title"><i class="pi pi-user" style="margin-right: 12px; color: #e53935;"></i> Dados Pessoais</h3>
+            <h:form id="formPerfil">
+                <p:messages id="msgsPerfil" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+
+                <div class="form-group">
+                    <p:outputLabel for="nome" value="Nome de Exibição:" />
+                    <p:inputText id="nome" value="#{perfilController.usuarioEdicao.nome}" required="true" requiredMessage="O nome não pode ficar vazio."/>
+                </div>
+
+                <div class="form-group">
+                    <p:outputLabel for="email" value="E-mail de Acesso (Não pode ser alterado):" />
+                    <p:inputText id="email" value="#{perfilController.usuarioEdicao.email}" readonly="true" styleClass="input-readonly" />
+                </div>
+
+                <p:commandButton value="Salvar Alterações" action="#{perfilController.salvarPerfil}" icon="pi pi-save" update="@form :navForm" styleClass="btn-acao" style="margin-top: 10px; width: 250px;"/>
+            </h:form>
+        </div>
+
+        <div class="card-perfil">
+            <h3 class="card-title"><i class="pi pi-lock" style="margin-right: 12px; color: #e53935;"></i> Alterar Senha</h3>
+            <h:form id="formSenha">
+                <p:messages id="msgsSenha" closable="true" />
+
+                <div class="form-group">
+                    <p:outputLabel for="senhaAtual" value="Senha Atual:" />
+                    <p:password id="senhaAtual" value="#{perfilController.senhaAtual}" required="true" requiredMessage="Informe a senha atual." toggleMask="true" />
+                </div>
+
+                <div class="form-group">
+                    <p:outputLabel for="novaSenha" value="Nova Senha:" />
+                    <p:password id="novaSenha" value="#{perfilController.novaSenha}" required="true" requiredMessage="Informe a nova senha." feedback="true" promptLabel="Digite uma senha forte" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" toggleMask="true" />
+                </div>
+
+                <div class="form-group">
+                    <p:outputLabel for="confirmaSenha" value="Confirme a Nova Senha:" />
+                    <p:password id="confirmaSenha" value="#{perfilController.confirmarSenha}" required="true" requiredMessage="Confirme a nova senha." toggleMask="true"/>
+                </div>
+
+                <p:commandButton value="Atualizar Senha" action="#{perfilController.alterarSenha}" icon="pi pi-key" update="@form msgsSenha" styleClass="btn-acao" style="margin-top: 10px; width: 250px;"/>
+            </h:form>
+        </div>
+
+    </div>
+</h:body>
+</html>

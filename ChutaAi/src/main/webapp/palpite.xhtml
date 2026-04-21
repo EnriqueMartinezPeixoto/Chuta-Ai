@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+  <title>Meus Palpites - CHUTA AÍ!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    /* Fundo escuro padrão */
+    body { background-color: #0f0f0f; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; color: #ffffff; }
+
+    /* Navbar escura com logo vermelha */
+    .navbar { background-color: #1a1a1a; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2a2a; margin-bottom: 30px; }
+    .logo { margin: 0; color: #e53935; font-weight: 900; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+
+    /* Botão de voltar sutil */
+    .btn-voltar { color: #aaaaaa !important; font-weight: 600 !important; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px;}
+    .btn-voltar:hover { color: #ffffff !important; }
+
+    .container { max-width: 900px; margin: 0 auto 40px auto; padding: 0 20px; }
+
+    /* Card de Resumo Escuro */
+    .card-resumo {
+      background: #1c1c1e; border-radius: 12px; padding: 20px; margin-bottom: 25px;
+      border-left: 5px solid #e53935; box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      font-size: 1.1em; color: #dddddd; border-top: 1px solid #2c2c2e;
+      border-right: 1px solid #2c2c2e; border-bottom: 1px solid #2c2c2e;
+    }
+
+    /* Badge de Pontos Vermelho arredondado */
+    .pontos-badge { background: #e53935; color: white; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.9em; letter-spacing: 0.5px; }
+
+    /* OBRIGANDO A TABELA DO PRIMEFACES A FICAR NO DARK MODE */
+    .ui-datatable { box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-radius: 12px; overflow: hidden; border: 1px solid #2c2c2e; }
+    .ui-datatable .ui-datatable-header { background: #1c1c1e !important; border: none !important; border-bottom: 1px solid #2c2c2e !important; padding: 15px 20px !important; font-size: 1.2em; font-weight: 800; color: #ffffff !important; text-align: left; }
+    .ui-datatable th { background-color: #1a1a1a !important; border: none !important; border-bottom: 1px solid #2c2c2e !important; color: #888888 !important; font-weight: 700 !important; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; padding: 15px !important; }
+    .ui-datatable td { background-color: #1c1c1e !important; border: none !important; border-bottom: 1px solid #2c2c2e !important; padding: 18px 15px !important; color: #ffffff !important; }
+    .ui-datatable tr:hover td { background-color: #242426 !important; } /* Efeito ao passar o mouse na linha */
+    .ui-datatable-empty-message td { color: #888888 !important; text-align: center !important; padding: 40px !important; }
+
+    /* Ajuste do botão de edição na tabela */
+    .btn-edit { color: #aaaaaa !important; }
+    .btn-edit:hover { color: #e53935 !important; background-color: rgba(229, 57, 53, 0.1) !important; }
+  </style>
+</h:head>
+
+<h:body>
+  <div class="navbar">
+    <h2 class="logo">⚽ CHUTA AÍ!</h2>
+
+    <h:form id="navForm">
+      <p:commandLink value="Voltar aos Jogos" action="partidas?faces-redirect=true" styleClass="btn-voltar" ajax="false">
+        <i class="pi pi-arrow-left" style="margin-right: 5px;"></i>
+      </p:commandLink>
+    </h:form>
+  </div>
+
+  <div class="container">
+
+    <div class="card-resumo">
+      <span>Você já realizou <strong>#{palpiteController.meusPalpites.size()}</strong> palpites até agora. Boa sorte!</span>
+    </div>
+
+    <h:form id="formMeusPalpites">
+      <p:messages id="msgs" showDetail="false" closable="true">
+        <p:autoUpdate />
+      </p:messages>
+
+      <p:dataTable value="#{palpiteController.meusPalpites}" var="palp"
+                   emptyMessage="Você ainda não fez nenhum palpite. Volte aos jogos e comece a chutar!"
+                   reflow="true">
+
+        <f:facet name="header">
+          <i class="pi pi-history" style="margin-right: 10px; color: #e53935;"></i> Histórico de Chutes
+        </f:facet>
+
+        <p:column headerText="Partida">
+          <h:outputText value="#{palp.partida.timeCasa} x #{palp.partida.timeFora}" style="font-weight: 800; color: #ffffff;" />
+        </p:column>
+
+        <p:column headerText="Seu Chute" style="text-align: center;">
+          <h:outputText value="#{palp.palpiteCasa} - #{palp.palpiteFora}" style="font-size: 1.3em; font-weight: 900; color: #e53935;" />
+        </p:column>
+
+        <p:column headerText="Resultado Real" style="text-align: center;">
+          <h:outputText value="#{palp.partida.placarCasaReal} - #{palp.partida.placarForaReal}"
+                        rendered="#{palp.partida.placarCasaReal != null}" style="font-weight: 900; font-size: 1.1em; color: #ffffff;" />
+
+          <h:outputText value="Aguardando..." rendered="#{palp.partida.placarCasaReal == null}" style="color: #666666; font-weight: 600; font-size: 0.9em;" />
+        </p:column>
+
+        <p:column headerText="Pontos" style="text-align: center;">
+          <h:panelGroup rendered="#{palp.partida.placarCasaReal != null}">
+            <span class="pontos-badge">#{palp.pontos} pts</span>
+          </h:panelGroup>
+          <h:outputText value="-" rendered="#{palp.partida.placarCasaReal == null}" style="color: #444; font-weight: bold;"/>
+        </p:column>
+
+        <p:column headerText="Ações" style="text-align: center;">
+          <p:commandButton icon="pi pi-pencil" title="Alterar Palpite"
+                           action="#{palpiteController.prepararEdicao(palp)}"
+                           rendered="#{palp.partida.placarCasaReal == null}"
+                           styleClass="ui-button-flat btn-edit"
+                           ajax="false" />
+        </p:column>
+
+      </p:dataTable>
+    </h:form>
+  </div>
+</h:body>
+</html>
