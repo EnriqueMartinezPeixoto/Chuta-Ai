@@ -11,7 +11,7 @@ public class EmailService {
 
 
     private final String remetente = "chutaaibsi@gmail.com";
-    private final String senhaApp = "fdwu rsbk czuh qxry";
+    private final String senhaApp = "ADICIONAR SENHA APP";
 
     public void enviarEmailRecuperacao(String destinatario, String novaSenha) throws MessagingException {
         // Configurações do servidor do Gmail
